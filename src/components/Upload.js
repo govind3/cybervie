@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Link } from "@mui/material";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -50,6 +49,7 @@ function Upload() {
           file: fileURL,
           fileName: file.name,
         });
+        console.log(fileURL);
       }
     );
   };
@@ -73,9 +73,7 @@ function Upload() {
   const downloadFile = (fileURL) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
+    xhr.onload = (event) => {};
     xhr.open("GET", fileURL);
     xhr.send();
   };
@@ -96,6 +94,7 @@ function Upload() {
           <TextField
             id="outlined-basic"
             label="Email"
+            type="email"
             variant="outlined"
             onChange={(e) => setdata({ ...data, email: e.target.value })}
           />
@@ -121,6 +120,7 @@ function Upload() {
                   sx={{ width: "300px" }}
                   style={{ marginTop: "20px" }}
                   variant="outlined"
+                  key={user.email}
                 >
                   <CardContent>
                     <Box
@@ -144,12 +144,9 @@ function Upload() {
                         Email : {user.email}
                       </Typography>
                       <Box pt="1rem">
-                        <Button
-                          onClick={(e) => downloadFile(user.file)}
-                          variant="outlined"
-                        >
+                        <Link href={user.file} target="_blank">
                           File : {user.fileName}
-                        </Button>
+                        </Link>
                       </Box>
                     </Box>
                   </CardContent>
